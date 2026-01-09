@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Party East Hampshire - Event Viewer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="calendar-status" id="calendarStatus">
+                <!-- Status items generated dynamically -->
+            </div>
+
+            <!-- Month Navigation -->
+            <div class="month-navigation">
+                <button class="btn btn-nav" onclick="previousMonth()">&lt;</button>
+                <h3 id="currentMonthLabel">Loading...</h3>
+                <button class="btn btn-nav" onclick="nextMonth()">&gt;</button>
+            </div>
+
+            <div class="month-quick-nav" id="monthQuickNav"></div>
+
+            <div class="selected-count" id="selectedCount">
+                No events selected
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="selectAllInMonth()">Select All in Month</button>
+                <button class="btn btn-secondary" onclick="deselectAll()">Deselect All</button>
+            </div>
+
+            <div class="events-list" id="eventsList">
+                <div class="empty-state">
+                    <p>Loading events...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="top-controls">
+                <div class="style-option">
+                    <label>Title</label>
+                    <input type="text" id="canvasTitle" value="Upcoming Events">
+                </div>
+                <button class="btn btn-primary" onclick="downloadImage()">Download as PNG (1080x1350)</button>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="eventCanvas" width="1080" height="1350"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
