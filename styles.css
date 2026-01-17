@@ -444,9 +444,10 @@ h3 {
 .top-controls {
     display: flex;
     align-items: flex-end;
-    gap: 15px;
-    margin-bottom: 15px;
+    gap: 5px;
+    margin-bottom: 5px;
 }
+
 
 .top-controls .style-option {
     flex: 1;
@@ -476,3 +477,231 @@ h3 {
     }
 }
 
+/* Loading spinner */
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+/* Improved event selection */
+.event-checkbox {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    cursor: pointer;
+    accent-color: #00643b;
+}
+
+/* Status indicator improvements */
+.status-dot.success {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Better mobile responsiveness */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    .left-panel, .right-panel {
+        padding: 15px;
+    }
+    
+    .month-navigation {
+        padding: 8px 10px;
+    }
+    
+    .month-navigation h3 {
+        font-size: 0.9rem;
+    }
+    
+    .top-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .top-controls .style-option,
+    .top-controls .btn {
+        width: 100%;
+    }
+    
+    .action-buttons {
+        flex-wrap: wrap;
+    }
+    
+    .action-buttons .btn {
+        flex: 1 0 auto;
+        min-width: 120px;
+    }
+}
+
+/* Canvas loading state */
+.canvas-loading {
+    position: relative;
+    opacity: 0.7;
+}
+
+.canvas-loading::after {
+    content: 'Loading...';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+    color: #666;
+}
+
+/* Alt Text Section */
+.alt-text-section {
+    margin-top: 5px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid #e9ecef;
+}
+
+.alt-text-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.alt-text-header h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.btn-small {
+    padding: 6px 12px !important;
+    font-size: 0.8rem !important;
+}
+
+.alt-text-area {
+    width: 100%;
+    font-family: 'Manrope', sans-serif;
+    font-size: 0.85rem;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #333;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.alt-text-area:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+.alt-text-footer {
+    margin-top: 8px;
+    text-align: center;
+    color: #666;
+    font-size: 0.75rem;
+}
+
+/* Success feedback for copy button */
+.copy-success {
+    background: #28a745 !important;
+    color: white !important;
+    transition: background 0.3s ease;
+}
+
+
+/* Image Upload Controls */
+.image-upload-controls {
+    margin-top: 5px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.upload-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-top: 0;
+}
+
+.upload-controls .btn {
+    white-space: nowrap;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+}
+
+#currentImageName {
+    font-size: 0.85rem;
+    color: #666;
+    flex: 1;
+    min-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.upload-hint {
+    display: block;
+    margin-top: 5px;
+    color: #666;
+    font-size: 0.75rem;
+}
+
+/* Image Preview */
+.image-preview {
+    margin-top: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+    max-width: 200px;
+}
+
+#previewImage {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Status message */
+.upload-status {
+    margin-top: 5px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.upload-status.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.upload-status.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
