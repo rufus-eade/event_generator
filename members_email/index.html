@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>East Hampshire Green Party - Event Social Image Generator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../event_generator/styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="calendar-status" id="calendarStatus">
+                <!-- Status items generated dynamically -->
+            </div>
+
+            <!-- Month Navigation -->
+            <div class="month-navigation">
+                <button class="btn btn-nav" onclick="previousMonth()">&lt;</button>
+                <h3 id="currentMonthLabel">Loading...</h3>
+                <button class="btn btn-nav" onclick="nextMonth()">&gt;</button>
+            </div>
+
+            <div class="month-quick-nav" id="monthQuickNav"></div>
+
+            <div class="selected-count" id="selectedCount">
+                No events selected
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="selectUpcomingEHGP()">Select Upcoming EHGP</button>
+                <button class="btn btn-secondary" onclick="selectAllInMonth()">Select All in Month</button>
+                <button class="btn btn-secondary" onclick="deselectAll()">Deselect All</button>
+                <button class="btn btn-secondary" onclick="reloadCalendars()">Reload Calendars</button>
+            </div>
+
+            <div class="events-list" id="eventsList">
+                <div class="empty-state">
+                    <p>Loading events...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="right-panel">
+            <div class="top-controls">
+                <div class="style-option">
+                    <input type="text" id="canvasTitle" value="Events in East Hampshire">
+                </div>
+                <button class="btn btn-primary" onclick="downloadImage()">Download as PNG (540x595)</button>
+            </div>
+            <div class="top-controls">
+                <div class="style-option">
+                    <div class="upload-controls">
+                        <input type="file" id="headerImageUpload" accept="image/jpeg,image/png,image/gif,image/webp" style="display: none;">
+                        <button class="btn btn-secondary" onclick="document.getElementById('headerImageUpload').click()">Choose Header Image (MAX 1MB)</button>
+                        <span id="currentImageName">No image selected</span>
+                        <button class="btn btn-secondary" onclick="useUploadedImage()" id="useImageBtn" disabled>Use as Header</button>
+                        <button class="btn btn-secondary" onclick="clearHeaderImage()" id="clearImageBtn" disabled>Clear</button>
+                    </div>
+                    <div id="imagePreview" style="display: none;">
+                        <img id="previewImage" style="max-width: 1px; max-height: 1px; border: none;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="canvas-container">
+                <canvas id="eventCanvas" width="1080" height="1350"></canvas>
+            </div>
+
+            <!-- NEW: Alt Text Section -->
+            <div class="alt-text-section">
+                <div class="alt-text-header">
+                    <h3>Alt Text for Social Media</h3>
+                    <button class="btn btn-secondary btn-small" onclick="copyAltText()">Copy to Clipboard</button>
+                </div>
+                <textarea id="altText" class="alt-text-area" rows="5" readonly></textarea>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

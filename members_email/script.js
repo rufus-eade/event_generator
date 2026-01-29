@@ -29,15 +29,16 @@ const CORS_PROXIES = [
 ];
 
 // Card dimensions
-const CARD_HEIGHT = 140; // Always use this height
-const CARD_GAP = 20;
+//const CARD_HEIGHT = 140; // Always use this height
+//const CARD_GAP = 20;
+const CARD_HEIGHT = 79; // 140 * (540/960) = 79
+const CARD_GAP = 11;    // 20 * (540/960) = 11
 
 // Global state
 let allEvents = [];
 let selectedEvents = new Set();
 let currentMonth = new Date();
 let eventsByMonth = {};
-let logoImage = null;
 let fontsLoaded = false;
 let canvasUpdateTimeout = null;
 let headerImageDataUrl = null;
@@ -136,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initCalendarStatus();
     initStyleListeners();
     loadFonts();
-    loadLogo();
     loadCalendars();
     
     // Add image upload event listener
@@ -226,32 +226,6 @@ function loadFonts() {
         fontsLoaded = true;
         debouncedUpdateCanvas();
     });
-}
-
-// Load logo image
-function loadLogo() {
-    logoImage = new Image();
-    logoImage.crossOrigin = 'anonymous';
-    logoImage.onload = () => {
-        console.log('Logo loaded successfully');
-        debouncedUpdateCanvas();
-    };
-    logoImage.onerror = (error) => {
-        console.error('Failed to load logo:', error);
-        const fallbackLogo = new Image();
-        fallbackLogo.onload = () => {
-            console.log('Fallback logo loaded');
-            logoImage = fallbackLogo;
-            debouncedUpdateCanvas();
-        };
-        fallbackLogo.onerror = () => {
-            console.log('No logo available, using text fallback');
-            logoImage = null;
-            debouncedUpdateCanvas();
-        };
-        fallbackLogo.src = './assets/logo.jpg';
-    };
-    logoImage.src = 'assets/green-party_east-hampshire_long-left.jpg';
 }
 
 // Add debounced canvas update function
@@ -1392,7 +1366,7 @@ function updateCanvas() {
         ctx.fillStyle = '#f8f9fa';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#999999';
-        ctx.font = '500 28px "Manrope", sans-serif';
+        ctx.font = '500 16px "Manrope", sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText('Loading fonts...', canvas.width / 2, canvas.height / 2);
         return;
@@ -1400,8 +1374,12 @@ function updateCanvas() {
     
     const canvasTitle = document.getElementById('canvasTitle').value;
 
-    canvas.width = 1080;
-    canvas.height = 1350;
+    //canvas.width = 1080;
+    //canvas.height = 1350;
+    //canvas.width = 960;
+    //canvas.height = 1060;
+    canvas.width = 540;
+    canvas.height = 595; // 1060 * (540/960) = 595
 
     const selected = Array.from(selectedEvents)
         .map(i => allEvents[i])
@@ -1415,16 +1393,18 @@ function updateCanvas() {
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    const padding = 60;
+    const padding = 0;
     let headerHeight = padding;
     
     // Title (Bebas Neue) - ALWAYS show title first
     if (canvasTitle) {
         ctx.fillStyle = '#00643b';
-        ctx.font = '72px "Bebas Neue", sans-serif';
+        ctx.font = '40px "Bebas Neue", sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(canvasTitle.toUpperCase(), canvas.width / 2, headerHeight + 70);
-        headerHeight += 100;
+        //ctx.fillText(canvasTitle.toUpperCase(), canvas.width / 2, headerHeight + 70);
+        //headerHeight += 100;
+        ctx.fillText(canvasTitle.toUpperCase(), canvas.width / 2, headerHeight + 39); // 70 * 0.56
+        headerHeight += 56; // 100 * 0.56
     }
 
     // Check if we have a header image - AFTER TITLE
@@ -1440,12 +1420,11 @@ function updateCanvas() {
         
         // Draw the image directly from data URL
         drawHeaderImageFromData(ctx, padding, headerHeight, headerImageHeight, headerImage);
-        headerHeight += headerImageHeight + 20; // Reduced spacing below image
+        //headerHeight += headerImageHeight + 20; // Reduced spacing below image
+        headerHeight += headerImageHeight + 11; // 20 * 0.56 = 11
     }
 
-    const logoHeight = 180;
-    const logoMargin = 40; // Normal margin
-    const availableHeight = canvas.height - headerHeight - logoHeight - logoMargin;
+    const availableHeight = canvas.height - headerHeight;
 
     if (selected.length === 0) {
         ctx.fillStyle = '#999999';
@@ -1467,20 +1446,20 @@ function updateCanvas() {
             drawEventCards(ctx, eventsToShow, startY, padding);
         }
     }
-
-    drawLogo(ctx, padding, logoHeight);
 }
 
 // Function to draw header image from data URL - UPDATED WITH BETTER SPACING
 function drawHeaderImageFromData(ctx, padding, startY, height, imageObj) {
-    const cardWidth = 1080 - (padding * 2);
+    //const cardWidth = 960 - (padding * 2);
+    const cardWidth = 540 - (padding * 2);
     const x = padding;
     
     // Wait for image to load
     if (!imageObj.complete) {
         // Draw a placeholder if image hasn't loaded yet
         ctx.fillStyle = '#f0f0f0';
-        roundRect(ctx, x, startY, cardWidth, height, 16, true, false);
+        //roundRect(ctx, x, startY, cardWidth, height, 16, true, false);
+        roundRect(ctx, x, y, cardWidth, CARD_HEIGHT, 9, true, false); // 16 * 0.56 = 9
         ctx.fillStyle = '#999';
         ctx.font = '500 24px "Manrope", sans-serif';
         ctx.textAlign = 'center';
@@ -1490,7 +1469,8 @@ function drawHeaderImageFromData(ctx, padding, startY, height, imageObj) {
     
     // Create clipping path for rounded corners
     ctx.save();
-    roundRect(ctx, x, startY, cardWidth, height, 12, false, false); // Smaller radius
+    //roundRect(ctx, x, startY, cardWidth, height, 12, false, false); // Smaller radius
+    roundRect(ctx, badgeX, badgeY, badgeWidth, badgeHeight, 7, true, false); // 12 * 0.56 = 7
     ctx.clip();
     
     // Calculate image dimensions to fill the space (cropped to fit)
@@ -1520,27 +1500,34 @@ function drawHeaderImageFromData(ctx, padding, startY, height, imageObj) {
     // Add a subtle border
     ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
     ctx.lineWidth = 1; // Thinner border
-    roundRect(ctx, x, startY, cardWidth, height, 12, false, true);
+    //roundRect(ctx, x, startY, cardWidth, height, 12, false, true);
+    roundRect(ctx, x, startY, cardWidth, height, 7, false, true);
 }
 
 function drawEventCards(ctx, events, startY, padding) {
     let y = startY;
     
     events.forEach((event) => {
-        const cardWidth = 1080 - (padding * 2);
+        //const cardWidth = 960 - (padding * 2);
+        const cardWidth = 540 - (padding * 2);
         const x = padding;
         
         const cardColor = getCalendarColor(event.calendar);
         ctx.fillStyle = cardColor;
-        roundRect(ctx, x, y, cardWidth, CARD_HEIGHT, 16, true, false);
+        //roundRect(ctx, x, y, cardWidth, CARD_HEIGHT, 16, true, false);
+        roundRect(ctx, x, y, cardWidth, CARD_HEIGHT, 9, true, false);
         
-        const badgeWidth = 140;
-        const badgeHeight = 90;
-        const badgeX = x + 20;
+        //const badgeWidth = 140;
+        //const badgeHeight = 90;
+        //const badgeX = x + 20;
+        const badgeWidth = 79;  // 140 * 0.56
+        const badgeHeight = 50; // 90 * 0.56
+        const badgeX = x + 11;  // 20 * 0.56
         const badgeY = y + (CARD_HEIGHT - badgeHeight) / 2;
         
         ctx.fillStyle = '#ffffff';
-        roundRect(ctx, badgeX, badgeY, badgeWidth, badgeHeight, 12, true, false);
+        //roundRect(ctx, badgeX, badgeY, badgeWidth, badgeHeight, 12, true, false);
+        roundRect(ctx, badgeX, badgeY, badgeWidth, badgeHeight, 7, true, false);
         
         const day = event.start.getDate();
         const month = event.start.toLocaleDateString('en-GB', { month: 'short' });
@@ -1548,34 +1535,41 @@ function drawEventCards(ctx, events, startY, padding) {
         ctx.fillStyle = '#333333';
         ctx.textAlign = 'center';
         
-        ctx.font = '52px "Bebas Neue", sans-serif';
-        ctx.fillText(day.toString(), badgeX + badgeWidth / 2, badgeY + 50);
+        ctx.font = '29px "Bebas Neue", sans-serif';
+        //ctx.fillText(day.toString(), badgeX + badgeWidth / 2, badgeY + 50);
+        ctx.fillText(day.toString(), badgeX + badgeWidth / 2, badgeY + 28); // 50 * 0.56
         
-        ctx.font = '600 22px "Manrope", sans-serif';
-        ctx.fillText(month, badgeX + badgeWidth / 2, badgeY + 78);
+        ctx.font = '600 12px "Manrope", sans-serif';
+        //ctx.fillText(month, badgeX + badgeWidth / 2, badgeY + 78);
+        ctx.fillText(month, badgeX + badgeWidth / 2, badgeY + 44);          // 78 * 0.56
         
         ctx.fillStyle = '#ffffff';
-        ctx.font = '700 32px "Manrope", sans-serif';
+        ctx.font = '700 18px "Manrope", sans-serif';
         ctx.textAlign = 'left';
-        const titleX = badgeX + badgeWidth + 30;
-        const titleMaxWidth = cardWidth - badgeWidth - 100;
+        //const titleX = badgeX + badgeWidth + 30;
+        const titleX = badgeX + badgeWidth + 17; // 30 * 0.56 = 17
+        //const titleMaxWidth = cardWidth - badgeWidth - 100;
+        const titleMaxWidth = cardWidth - badgeWidth - 56; // 100 * 0.56
         
         // Fixed positions - always the same regardless of location
-        const titleY = y + 45;
-        const timeY = y + 80;
-        const locationY = y + 115; // Always reserve space for location
+        //const titleY = y + 45;
+        //const timeY = y + 80;
+        //const locationY = y + 115; // Always reserve space for location
+        const titleY = y + 25;   // 45 * 0.56
+        const timeY = y + 45;    // 80 * 0.56
+        const locationY = y + 64; // 115 * 0.56
         
         ctx.fillText(truncateText(ctx, event.title, titleMaxWidth), titleX, titleY);
         
         ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-        ctx.font = '500 24px "Manrope", sans-serif';
+        ctx.font = '500 13px "Manrope", sans-serif';
         
         const timeText = formatTimeRangeWithOrganiser(event);
         ctx.fillText(truncateText(ctx, timeText, titleMaxWidth), titleX, timeY);
         
         if (event.location) {
             ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.font = '500 22px "Manrope", sans-serif';
+            ctx.font = '500 12px "Manrope", sans-serif';
             ctx.fillText(truncateText(ctx, event.location, titleMaxWidth), titleX, locationY);
         }
         // If no location, the space is just left blank (consistent spacing)
@@ -1583,31 +1577,6 @@ function drawEventCards(ctx, events, startY, padding) {
         ctx.textAlign = 'left';
         y += CARD_HEIGHT + CARD_GAP;
     });
-}
-
-function drawLogo(ctx, padding, logoHeight) {
-    const logoY = 1350 - logoHeight - 40;
-    
-    if (logoImage && logoImage.complete && logoImage.naturalWidth > 0) {
-        const maxWidth = 600;
-        const aspectRatio = logoImage.naturalWidth / logoImage.naturalHeight;
-        let logoWidth = maxWidth;
-        let logoDrawHeight = logoWidth / aspectRatio;
-        
-        if (logoDrawHeight > logoHeight) {
-            logoDrawHeight = logoHeight;
-            logoWidth = logoDrawHeight * aspectRatio;
-        }
-        
-        const logoX = (1080 - logoWidth) / 2;
-        
-        ctx.drawImage(logoImage, logoX, logoY, logoWidth, logoDrawHeight);
-    } else {
-        ctx.fillStyle = '#00643b';
-        ctx.font = '600 28px "Manrope", sans-serif';
-        ctx.textAlign = 'center';
-        ctx.fillText('Green Party East Hampshire', 540, logoY + 60);
-    }
 }
 
 function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
